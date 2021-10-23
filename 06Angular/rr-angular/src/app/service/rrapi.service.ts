@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { restaurant } from '../models/restaurant';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RRApiService {
 
-  rootUrl: string = 'https://restoreviewsapi.azurewebsites.net/api/restaurant';
+  private rootUrl: string = environment.rrAPIUrl;
 
   //this is how dep injection work in angular
   constructor(private http: HttpClient) { }
@@ -27,5 +28,15 @@ export class RRApiService {
   deleteRestaurant(id: number): Promise<void>
   {
     return this.http.delete<void>(this.rootUrl + '/' + id).toPromise();
+  }
+
+  addRestaurant(restaurant: restaurant): Promise<restaurant>
+  {
+    return this.http.post<restaurant>(this.rootUrl, restaurant).toPromise();
+  }
+
+  editRestaurant(restaurant: restaurant): Promise<restaurant>
+  {
+    return this.http.put<restaurant>(this.rootUrl + '/' + restaurant.id, restaurant).toPromise();
   }
 }
